@@ -21,106 +21,100 @@ import java.net.URLEncoder
 
 @Composable
 fun AppNavigation(modifier: Modifier){
-    val navController = rememberNavController()
+  val navController = rememberNavController()
 
-    NavHost(
-        navController = navController,
-      startDestination = Screen.MoviesScreen.route,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        popEnterTransition = { EnterTransition.None },
-        popExitTransition = { ExitTransition.None }
-    ) {
-        composable(Screen.LoginScreen.route) {
-            SigninPage(
-                modifier = modifier,
-                vm = koinViewModel(),
-                onSuccess = { name ->
-                    val encodedName = URLEncoder.encode(name, "UTF-8")
+  NavHost(
+    navController = navController,
+    startDestination = Screen.MoviesScreen.route,
+    enterTransition = { EnterTransition.None },
+    exitTransition = { ExitTransition.None },
+    popEnterTransition = { EnterTransition.None },
+    popExitTransition = { ExitTransition.None }
+  ) {
+    composable(Screen.LoginScreen.route) {
+      SigninPage(
+        modifier = modifier,
+        vm = koinViewModel(),
+        onSuccess = { name ->
+          val encodedName = URLEncoder.encode(name, "UTF-8")
 
-                    navController.navigate(
-                        "profile_screen/$encodedName"
-                    )
-                },
-                navToForgotPassword = {
-                    navController.navigate(Screen.ForgotPasswordScreen.route)
-                }
-            )
+          navController.navigate(
+            "profile_screen/$encodedName"
+          )
+        },
+        navToForgotPassword = {
+          navController.navigate(Screen.ForgotPasswordScreen.route)
         }
-
-
-        composable(Screen.GithubScreen.route) {
-            GithubScreen(
-                modifier = modifier,
-                vm = koinViewModel()
-            )
-        }
-
-        composable(
-            route = "profile_screen/{name}",
-            arguments = listOf(
-                navArgument("name") { defaultValue = "" }
-            )
-        ) { backStackEntry ->
-            val name = backStackEntry.arguments?.getString("name") ?: ""
-
-
-            ProfileScreen(
-                modifier = modifier,
-                name = name,
-                vm = koinViewModel(),
-
-                onEndSession = {
-                    navController.navigate(
-                        "login"
-                    )
-                },
-
-                onAskExchangeRate = {
-                    navController.navigate(
-                        "exchangeRate"
-                    )
-                }
-            )
-        }
-
-        composable(Screen.ExchangeRateScreen.route) {
-            ExchangeRateScreen(
-                modifier = modifier,
-                vm = koinViewModel()
-            )
-        }
-
-        composable(Screen.ForgotPasswordScreen.route) {
-            ForgotPasswordScreen(
-                modifier = modifier,
-                vm = koinViewModel(),
-                onBackToLogin = {
-                    navController.navigate(Screen.LoginScreen.route) {
-                        popUpTo(Screen.LoginScreen.route) { inclusive = true }
-                    }
-                }
-            )
-        }
-
-        composable(Screen.MoviesScreen.route) {
-            MoviesScreen(
-                modifier = modifier,
-                vm = koinViewModel()
-            )
-        }
-
-        composable(Screen.PostsScreen.route) {
-            PostsScreen(
-                modifier = modifier,
-                vm = koinViewModel()
-            )
-        }
-
-        composable(Screen.Dollar.route) {
-            DollarScreen()
-        }
-
-
+      )
     }
+
+
+    composable(Screen.GithubScreen.route) {
+      GithubScreen(
+        modifier = modifier,
+        vm = koinViewModel()
+      )
+    }
+
+    composable(
+      route = "profile_screen/{name}",
+      arguments = listOf(
+        navArgument("name") { defaultValue = "" }
+      )
+    ) { backStackEntry ->
+      val name = backStackEntry.arguments?.getString("name") ?: ""
+
+
+      ProfileScreen(
+        modifier = Modifier,
+        name = "Nombre del usuario",
+        profileViewModel = koinViewModel(),
+        onEndSession = {
+          navController.navigate("login")
+        },
+        onAskExchangeRate = {
+          navController.navigate("exchangeRate")
+        }
+      )
+    }
+
+    composable(Screen.ExchangeRateScreen.route) {
+      ExchangeRateScreen(
+        modifier = modifier,
+        vm = koinViewModel()
+      )
+    }
+
+    composable(Screen.ForgotPasswordScreen.route) {
+      ForgotPasswordScreen(
+        modifier = modifier,
+        vm = koinViewModel(),
+        onBackToLogin = {
+          navController.navigate(Screen.LoginScreen.route) {
+            popUpTo(Screen.LoginScreen.route) { inclusive = true }
+          }
+        }
+      )
+    }
+
+    composable(Screen.MoviesScreen.route) {
+      MoviesScreen(
+        modifier = modifier,
+        vm = koinViewModel()
+      )
+    }
+
+    composable(Screen.PostsScreen.route) {
+      PostsScreen(
+        modifier = modifier,
+        vm = koinViewModel()
+      )
+    }
+
+    composable(Screen.Dollar.route) {
+      DollarScreen()
+    }
+
+
+  }
 }

@@ -153,7 +153,7 @@ val appModule = module {
     //view models
     viewModel { GithubViewModel(get(), androidContext()) }
     viewModel { LoginViewModel(get()) }
-    viewModel { ProfileViewModel(get(), get()) }
+    viewModel { ProfileViewModel(get()) }
     viewModel { ExchangeRateViewModel(get()) }
     viewModel { ForgotPasswordViewModel(get(), get()) }
     viewModel { WhatsappViewModel(get ()) }
