@@ -22,6 +22,7 @@ class DollarViewModel(
         object Loading : DollarUIState()
         class Error(val message: String) : DollarUIState()
         class Success(val data: DollarModel) : DollarUIState()
+        class HistoryLoaded(val history: List<DollarModel>) : DollarUIState()
     }
 
     private val _uiState = MutableStateFlow<DollarUIState>(DollarUIState.Loading)
@@ -29,6 +30,17 @@ class DollarViewModel(
 
     init {
         getDollar()
+    }
+
+    fun loadHistory() {
+      viewModelScope.launch(Dispatchers.IO) {
+        try {
+          val history = fetchDollarUseCase.getHistory()
+          _uiState.value = DollarUIState.HistoryLoaded(history)
+        } catch (e: Exception) {
+          _uiState.value = DollarUIState.Error("Error al cargar histórico: ${e.message}")
+        }
+      }
     }
 
     fun getDollar() {
@@ -52,12 +64,10 @@ class DollarViewModel(
                     continuation.resumeWithException(task.exception ?: Exception("Unknown error"))
                     return@addOnCompleteListener
                 }
-                // Si la tarea fue exitosa, se obtiene el token
                 val token = task.result
                 Log.d("FIREBASE", "FCM Token: $token")
 
 
-                // Reanudar la ejecución con el token
                 continuation.resume(token ?: "")
             }
     }
